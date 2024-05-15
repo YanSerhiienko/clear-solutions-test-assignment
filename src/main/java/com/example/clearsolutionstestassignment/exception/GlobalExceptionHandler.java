@@ -1,5 +1,6 @@
 package com.example.clearsolutionstestassignment.exception;
 
+import com.example.clearsolutionstestassignment.responseWrapper.ValidationErrorWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,18 +63,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, List<String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ValidationErrorWrapper> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> exceptionMessages = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .toList();
-        return new ResponseEntity<>(getErrorsMap(exceptionMessages), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
 
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
+        ValidationErrorWrapper wrapper = ValidationErrorWrapper.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Some fields are invalid")
+                .errors(exceptionMessages)
+                .build();
+
+        return new ResponseEntity<>(wrapper, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -73,8 +73,8 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(responseDTO)));
 
         response.andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(user.getFirstName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(user.getLastName())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.firstName", CoreMatchers.is(user.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastName", CoreMatchers.is(user.getLastName())));
     }
 
     @Test
@@ -86,8 +86,8 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(responseDTO)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDTO.getFirstName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDTO.getLastName())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.firstName", CoreMatchers.is(responseDTO.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.lastName", CoreMatchers.is(responseDTO.getLastName())));
     }
 
     @Test
@@ -100,7 +100,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(user)));
 
         response.andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(responseDTO.getEmail())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email", CoreMatchers.is(responseDTO.getEmail())));
     }
 
     @Test
@@ -114,7 +114,7 @@ class UserControllerTest {
                 .content(message));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", CoreMatchers.is(message)));
+                .andExpect(jsonPath("$.message", CoreMatchers.is(message)));
     }
 
     @Test
@@ -127,7 +127,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", CoreMatchers.is(userList.size())));
+                .andExpect(jsonPath("$.data.length()", CoreMatchers.is(userList.size())));
     }
 
     @Test
@@ -140,7 +140,7 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", CoreMatchers.is(userList.size())));
+                .andExpect(jsonPath("$.data.length()", CoreMatchers.is(userList.size())));
     }
 
     @Test
@@ -152,6 +152,6 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(responseDTO)));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.phoneNumber", CoreMatchers.is(responseDTO.getPhoneNumber())));
+                .andExpect(jsonPath("$.data.phoneNumber", CoreMatchers.is(responseDTO.getPhoneNumber())));
     }
 }
